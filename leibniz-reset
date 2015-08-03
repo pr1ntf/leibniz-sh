@@ -1,0 +1,7 @@
+#!/bin/sh
+
+dir=/usr/local/share/leibniz
+
+echo '1' > $dir/seed
+echo '0' > $dir/pi
+echo 'Leibniz reset'

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Add the following lines to /etc/rc.conf to enable leibniz:
+#
+# leibniz_enable="YES"
+# leibniz_it="32"
+# leibniz_log="/usr/local/share/leibniz/log"
+#
+
+. /etc/rc.subr
+name="leibniz"
+rcvar=leibniz_enable
+
+# read configuration and set defaults
+load_rc_config "$name"
+: ${leibniz_enable="NO"}
+: ${leibniz_it="32"}
+: ${leibniz_log="/usr/local/share/leibiz/log"}
+
+start_cmd="leibniz_start"
+reset_cmd="leibniz_reset"
+
+leibniz_start()
+{
+	/usr/local/bin/leibniz $leibniz_it >> $leibniz_log
+}
+
+run_rc_command "$1"

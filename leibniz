@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Leibniz formula for pi using shell
+
+# Check for empty command line
+if [ -z $1 ]; then
+	echo 'Error: You must enter interations.'
+	echo 'Example: leibniz 32'
+else
+
+# Set default leibniz folder location
+dir=/usr/local/share/leibniz
+
+i=$1			# Take from input
+scale=64 		# How far out to take decimal place
+seed=$(cat $dir/seed)   # Seed to know where it left off
+
+# Start calculation
+while [ $i -gt 0 ];
+do
+	# Run new work unit
+	pi1=$(echo "scale=$scale; (4/$seed)-(4/($seed+2)) \
+	+(4/($seed+4))-(4/($seed+6))" | bc)
+ 
+	# Set seed for next run
+	seed=$(expr $seed + 8)
+	echo $seed > $dir/seed
+
+	# Find old value for pi and add to new workunit
+	pi2=$(cat $dir/pi)
+	pi=$(echo "scale=$scale; $pi1 + $pi2" | bc)
+	echo $pi > $dir/pi
+
+	# Iteration increment
+	i=$(expr $i - 1)
+done
+
+# Show the calculation after iterations are done
+date
+cat $dir/pi
+
+fi
